@@ -2,17 +2,14 @@
 
 #$1: Path to .blog file used to create new submission
 
-BLOG_LINKS_HTML_PATH="/path/to/htmlpage/of/linklistings.html"
-BLOG_DIRECTORY_PATH="/path/to/blog/html/files/directory/" #MUST INCLUDE A TRAILING /
 date_of_submission_formatted=$(date +"%B %Y")
 date_of_submission_code=$(date +"%Y%m")
 week_and_day_of_submission=$(date +"%A %d")
 name_with_underscores=$(basename $1 .blog)
 
 create_link_list_entry (){
-    #$1: Path to .html file on website
     local name=$(echo $name_with_underscores | sed 's/_/ /g')
-    echo "<li><a href=\"$1\" class=\"post\">$week_and_day_of_submission - $name</a></li>"
+    echo "<li><a href=\"zmhanham.com/blog/${name_with_underscores}.html\" class=\"post\">$week_and_day_of_submission - $name</a></li>"
 }
 
 insert_month_listing () {
