@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#$1: Path to .blog file used to create new submission
+
+BLOG_LINKS_HTML_PATH="/path/to/htmlpage/of/linklistings.html"
+BLOG_DIRECTORY_PATH="/path/to/blog/html/files/directory/" #MUST INCLUDE A TRAILING /
+date_of_submission_formatted=$(date +"%B %Y")
+date_of_submission_code=$(date +"%Y%m")
+week_and_day_of_submission=$(date +"%A %d")
+name_with_underscores=$(basename $1 .blog)
+
+create_link_list_entry (){
+    #$1: Path to .html file on website
+    local name=$(echo $name_with_underscores | sed 's/_/ /g')
+    echo "<li><a href=\"$1\" class=\"post\">$week_and_day_of_submission - $name</a></li>"
+}
+
+insert_month_listing () {
+    #$1: Path to .html file on website
+    local linenum=$(sed -n "/id=\"start\"/=" $BLOG_LINKS_HTML_PATH)
+    if [[ $linenum ]]; then
+        local link_entry=$(create_link_list_entry $1)
+        ((linenum=linenum+1))
+        sed -i "${linenum}i <h3>$date_of_submission_formatted</h3>\n \
+<ul id=\"$date_of_submission_code\">\n \
+$link_entry \n \
+</ul>" $BLOG_LINKS_HTML_PATH
+    else
+        echo "Could not find start D:"
+    fi
+}
+
+insert_link () {
+    #$1: Path to .html file on website
+    local linenum=$(sed -n "/id=\"$date_of_submission_code\"/=" $BLOG_LINKS_HTML_PATH)
+
+    if [[ $linenum ]]; then
+        ((linenum=linenum+1))
+        local link_entry=$(create_link_list_entry $1)
+        sed -i "${linenum}i $link_entry" $BLOG_LINKS_HTML_PATH
+    else
+        insert_month_listing $1
+    fi
+}
+
+
+blog2html $1 > $BLOG_DIRECTORY_PATH$name_with_underscores.html
+
+insert_link $BLOG_DIRECTORY_PATH$name_with_underscores.html
