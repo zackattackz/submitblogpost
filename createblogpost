@@ -18,7 +18,7 @@ insert_month_listing () {
     if [[ $linenum ]]; then
         local link_entry=$(create_link_list_entry $1)
         ((linenum=linenum+1))
-        sed -i "${linenum}i <h3>$date_of_submission_formatted</h3>\n \
+        sed -i "${linenum}i <h3 class=\"month-header\">$date_of_submission_formatted</h3>\n \
 <ul id=\"$date_of_submission_code\">\n \
 $link_entry \n \
 </ul>" $BLOG_LINKS_HTML_PATH
