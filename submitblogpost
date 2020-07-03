@@ -1,7 +1,12 @@
 #!/bin/bash
 
+if [[ -z "$1" ]]; then
+    exit 1
+fi
+
 #$1: path to .blog file
 name=$(basename $1 .blog)
 
-scp -i ~/.ssh/id_zmhanhamserveruser $1 zmhanham@192.241.155.95:/tmp/
-ssh -i ~/.ssh/id_zmhanhamserveruser zmhanham@192.241.155.95 createblogpost /tmp/$name.blog
+scp -i ~/.ssh/id_zmhanhamserveruser $1 zmhanham@192.241.155.95:/tmp/ \
+    && ssh -i ~/.ssh/id_zmhanhamserveruser zmhanham@192.241.155.95 createblogpost /tmp/$name.blog \
+    || echo "Error in transferring blog file"

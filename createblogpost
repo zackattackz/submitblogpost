@@ -41,6 +41,6 @@ insert_link () {
 }
 
 
-blog2html $1 > $BLOG_DIRECTORY_PATH$name_with_underscores.html
-
-insert_link $BLOG_DIRECTORY_PATH$name_with_underscores.html
+blog2html $1 > $BLOG_DIRECTORY_PATH$name_with_underscores.html \ 
+    && insert_link $BLOG_DIRECTORY_PATH$name_with_underscores.html \
+    || echo "Error in blog2html"
